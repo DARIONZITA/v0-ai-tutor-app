@@ -82,7 +82,25 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Decorative background layers to reduce whiteness and add depth */}
+      <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-white/60 to-blue-50" aria-hidden />
+      <div className="absolute -left-28 -top-20 w-[520px] h-[520px] bg-gradient-to-tr from-primary/10 to-secondary/10 rounded-full blur-3xl opacity-80 transform rotate-12" aria-hidden />
+      <div className="absolute right-0 bottom-[-80px] w-[420px] h-[420px] bg-gradient-to-br from-purple-50 to-pink-50 rounded-full blur-3xl opacity-60" aria-hidden />
+      {/* Subtle noise texture as SVG - low opacity for gentle effect */}
+      <svg className="pointer-events-none absolute inset-0 w-full h-full opacity-10 mix-blend-multiply" aria-hidden>
+        <defs>
+          <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.08" />
+            </feComponentTransfer>
+          </filter>
+        </defs>
+        <rect width="100%" height="100%" filter="url(#noiseFilter)" fill="#111" />
+      </svg>
+      <div className="relative z-10">
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-lg border-b border-gray-200/50 z-50">
         <div className="container mx-auto px-4 lg:px-6 py-4">
@@ -350,6 +368,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   )
 }
