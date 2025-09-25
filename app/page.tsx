@@ -60,7 +60,7 @@ export default function Home() {
         const backendAnalyses = analysesResponse.analyses || []
         
         // Converter formato do backend para frontend
-        const FRONTEND_BACKEND_BASE = 'http://127.0.0.1:8000'
+        const FRONTEND_BACKEND_BASE = 'https://backend-professoria.onrender.com'
         const frontendAnalyses: FrontendAnalysis[] = backendAnalyses.map(analysis => {
           const rawData = analysis.data || {}
           let imageUrl = rawData.imageUrl || ''
