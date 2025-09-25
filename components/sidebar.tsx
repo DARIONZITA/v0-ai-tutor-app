@@ -116,7 +116,9 @@ export function Sidebar({
             </div>
           ) : (
             <div className="space-y-2">
-              {analyses.map((analysis, index) => (
+              {analyses
+                .filter(analysis => analysis && analysis.id) // Filter out invalid analyses
+                .map((analysis, index) => (
                 <Card 
                   key={analysis.id}
                   className={`p-3 cursor-pointer transition-all duration-200 hover:shadow-md border ${
@@ -133,20 +135,20 @@ export function Sidebar({
                           #{index + 1}
                         </span>
                         <span className="text-xs text-gray-500">
-                          {formatDate(analysis.timestamp)}
+                          {analysis.timestamp ? formatDate(analysis.timestamp) : 'Unknown Date'}
                         </span>
                       </div>
                       
                       <h3 className="font-medium text-sm text-gray-900 truncate mb-1">
-                        {analysis.studentName}
+                        {analysis.studentName || 'Unknown Student'}
                       </h3>
                       
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                          {analysis.subject}
+                          {analysis.subject || 'Unknown Subject'}
                         </span>
                         <span className="text-xs text-gray-400">
-                          {formatTime(analysis.timestamp)}
+                          {analysis.timestamp ? formatTime(analysis.timestamp) : 'Unknown Time'}
                         </span>
                       </div>
                     </div>
@@ -163,9 +165,9 @@ export function Sidebar({
       {/* Footer Stats */}
       <div className="p-4 border-t border-gray-200/50 bg-gray-50/50">
         <div className="text-center">
-          <div className="text-lg font-bold text-gray-900">{analyses.length}</div>
+          <div className="text-lg font-bold text-gray-900">{analyses.filter(a => a && a.id).length}</div>
           <div className="text-xs text-gray-500">
-            {analyses.length === 1 ? 'Analysis performed' : 'Analyses performed'}
+            {analyses.filter(a => a && a.id).length === 1 ? 'Analysis performed' : 'Analyses performed'}
           </div>
         </div>
       </div>

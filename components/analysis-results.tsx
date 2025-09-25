@@ -18,9 +18,9 @@ import {
   BookOpen,
   AlertCircle,
   CheckCircle2,
-  Target
+  Target,
+  X
 } from "lucide-react"
-import { X } from "lucide-react"
 
 interface Analysis {
   id: string
@@ -50,14 +50,14 @@ interface AnalysisResultsProps {
 export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analysesCount, analyses }: AnalysisResultsProps) {
   const [showProgression, setShowProgression] = useState(false)
   const analysesForStudent = analyses || []
-  const studentAnalyses = analysis ? analysesForStudent.filter(a => a.studentName === analysis.studentName) : []
+  const studentAnalyses = analysis ? analysesForStudent.filter(a => a?.studentName === analysis.studentName) : []
 
   // Build and download a JSON report containing current analysis + student history and simple metrics
   async function downloadReport() {
-    if (!analysis) return
+    if (!analysis || !analysis.id) return
     const history = studentAnalyses || []
-    const avgError = Math.round((history.reduce((s,a) => s + (a.data?.errorPercentage || a.data?.ai_analysis?.errorPercentage || 0), 0) / Math.max(1, history.length)))
-    const recent = history.length >= 2 ? (history[0].data?.errorPercentage || history[0].data?.ai_analysis?.errorPercentage || 0) - (history[history.length-1].data?.errorPercentage || history[history.length-1].data?.ai_analysis?.errorPercentage || 0) : null
+    const avgError = Math.round((history.reduce((s,a) => s + (a?.data?.errorPercentage || a?.data?.ai_analysis?.errorPercentage || 0), 0) / Math.max(1, history.length)))
+    const recent = history.length >= 2 ? (history[0]?.data?.errorPercentage || history[0]?.data?.ai_analysis?.errorPercentage || 0) - (history[history.length-1]?.data?.errorPercentage || history[history.length-1]?.data?.ai_analysis?.errorPercentage || 0) : null
 
     const report = {
       generatedAt: new Date().toISOString(),
@@ -91,7 +91,7 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
     return <ProcessingView />
   }
 
-  if (!analysis) {
+  if (!analysis || !analysis.id) {
     return <EmptyState onNewAnalysis={onNewAnalysis} />
   }
 
@@ -107,7 +107,7 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
               </div>
               <div>
                 <h1 className="text-xl md:text-xl lg:text-2xl font-bold text-gray-900">Full Analysis</h1>
-                {analysis.data?.score && (
+                {analysis.data?.score?.label && (
                   <div className="mt-1">
                     <Badge variant="secondary">Score: {analysis.data.score.label}</Badge>
                   </div>
@@ -115,15 +115,15 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-3 text-sm text-gray-600 mt-1">
                   <div className="flex items-center gap-1">
                     <User className="w-4 h-4" />
-                    {analysis.studentName}
+                    {analysis.studentName || 'Unknown Student'}
                   </div>
                   <div className="flex items-center gap-1">
                     <BookOpen className="w-4 h-4" />
-                    {analysis.subject}
+                    {analysis.subject || 'Unknown Subject'}
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    {analysis.timestamp.toLocaleString('en-US')}
+                    {analysis.timestamp ? analysis.timestamp.toLocaleString('en-US') : 'Unknown Date'}
                   </div>
                 </div>
               </div>
@@ -145,7 +145,7 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
       <div className="flex-1 px-4 md:px-4 lg:px-8 py-4 md:py-4 lg:py-8 overflow-y-auto">
         <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
           {/* Analyzed Text Sample - Full Width Card */}
-          {analysis.data.detected_text && (
+          {analysis.data?.detected_text && (
             <Card className="p-4 md:p-4 lg:p-6 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -173,15 +173,15 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                 <div className="flex-1">
                   <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Main Concept</h3>
                   <Badge variant="destructive" className="mb-3">
-                    {analysis.data.errorPercentage}% difficulty
+                    {analysis.data?.errorPercentage || 0}% difficulty
                   </Badge>
                   
                   {/* Show main concept from structured analysis if available */}
                   <h4 className="font-semibold text-gray-800 mb-3">
-                    {((analysis.data as any).ai_structured?.mainConcept || (analysis.data as any).ai_analysis?.mainConcept || analysis.data.mainError)}
+                    {((analysis.data as any)?.ai_structured?.mainConcept || (analysis.data as any)?.ai_analysis?.mainConcept || analysis.data?.mainError || 'Unknown Error')}
                   </h4>
                   
-                  {analysis.data.reasoning && (
+                  {analysis.data?.reasoning && (
                     <div className="mb-3 text-xs text-gray-600 bg-white/60 border border-gray-200 rounded p-3">
                       <p className="font-semibold mb-1">AI Reasoning</p>
                       <p className="leading-relaxed">
@@ -193,7 +193,7 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                     <strong>Related concepts:</strong>
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {analysis.data.concepts.map((concept, index) => (
+                    {(analysis.data?.concepts || []).map((concept, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {concept}
                       </Badge>
@@ -216,11 +216,11 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                     <div className="flex items-center gap-3 flex-wrap">
                       <div className="min-w-0 max-w-full">
                         <Badge variant="destructive" className="text-xs block max-w-full">
-                          <span className="inline-block max-w-full whitespace-normal break-words block">{((analysis.data as any).ai_structured?.specificError || (analysis.data as any).ai_analysis?.specificError || analysis.data.mainError)}</span>
+                          <span className="inline-block max-w-full whitespace-normal break-words block">{((analysis.data as any)?.ai_structured?.specificError || (analysis.data as any)?.ai_analysis?.specificError || analysis.data?.mainError || 'Unknown Error')}</span>
                         </Badge>
                       </div>
                       <div className="flex-shrink-0">
-                        {((analysis.data as any).ai_structured?.isRecurrent || (analysis.data as any).ai_analysis?.isRecurrent) ? (
+                        {((analysis.data as any)?.ai_structured?.isRecurrent || (analysis.data as any)?.ai_analysis?.isRecurrent) ? (
                           <Badge variant="outline" className="text-xs border-orange-300 text-orange-700">
                             Recurrent Pattern
                           </Badge>
@@ -236,9 +236,9 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                     <div className="bg-white border border-red-100 rounded-lg p-4">
                       <h4 className="font-semibold text-gray-900 mb-2">Error Pattern</h4>
                       <div className="mb-3">
-                        <CollapsibleText text={((analysis.data as any).ai_structured?.specificError || (analysis.data as any).ai_analysis?.specificError || analysis.data.mainError) as string} maxChars={220} />
+                        <CollapsibleText text={((analysis.data as any)?.ai_structured?.specificError || (analysis.data as any)?.ai_analysis?.specificError || analysis.data?.mainError || 'Unknown Error') as string} maxChars={220} />
                       </div>
-                      {analysis.data.reasoning && (
+                      {analysis.data?.reasoning && (
                         <>
                           <h5 className="font-medium text-gray-800 mb-1">AI Analysis:</h5>
                           <div className="text-xs text-gray-600 bg-red-50 p-3 rounded">
@@ -321,7 +321,7 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                     ) : null}
                     
                     {/* Show general suggestions from analysis */}
-                    {analysis.data.suggestions && analysis.data.suggestions.length > 0 && (
+                    {analysis.data?.suggestions && Array.isArray(analysis.data.suggestions) && analysis.data.suggestions.length > 0 && (
                       <>
                         <h4 className="font-medium text-gray-800">General Recommendations:</h4>
                         {analysis.data.suggestions.map((suggestion, index) => (
@@ -379,7 +379,7 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
                       <div className="bg-white rounded-lg p-4 border">
                         <h4 className="font-semibold text-gray-900 mb-2">Focus on Main Error</h4>
                         <p className="text-sm text-gray-600">
-                          Specific exercises for {((analysis.data as any).ai_structured?.specificError || (analysis.data as any).ai_analysis?.specificError || analysis.data.mainError).toLowerCase()}
+                          Specific exercises for {((analysis.data as any)?.ai_structured?.specificError || (analysis.data as any)?.ai_analysis?.specificError || analysis.data?.mainError || 'unknown error').toLowerCase()}
                         </p>
                       </div>
                       <div className="bg-white rounded-lg p-4 border">
@@ -407,20 +407,22 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
           </Card>
 
           {/* Analyzed test image */}
-          <Card className="p-4 md:p-4 lg:p-6">
-            <h3 className="text-lg md:text-lg font-semibold text-gray-900 mb-4">Analyzed Test</h3>
-            <div className="bg-gray-50 rounded-xl p-2 md:p-4">
-              <img 
-                src={analysis.data.imageUrl} 
-                alt="Student's test"
-                className="max-w-full h-auto rounded-lg shadow-sm mx-auto"
-              />
-            </div>
-          </Card>
+          {analysis.data?.imageUrl && (
+            <Card className="p-4 md:p-4 lg:p-6">
+              <h3 className="text-lg md:text-lg font-semibold text-gray-900 mb-4">Analyzed Test</h3>
+              <div className="bg-gray-50 rounded-xl p-2 md:p-4">
+                <img 
+                  src={analysis.data.imageUrl} 
+                  alt="Student's test"
+                  className="max-w-full h-auto rounded-lg shadow-sm mx-auto"
+                />
+              </div>
+            </Card>
+          )}
         </div>
       </div>
         {/* Progression modal rendered at root of component so it overlays correctly */}
-        <ProgressModal open={showProgression} onClose={() => setShowProgression(false)} analyses={studentAnalyses} studentName={analysis.studentName} />
+        <ProgressModal open={showProgression} onClose={() => setShowProgression(false)} analyses={studentAnalyses} studentName={analysis.studentName || 'Unknown Student'} />
     </div>
   )
 }
@@ -429,9 +431,10 @@ export function AnalysisResults({ analysis, isProcessing, onNewAnalysis, analyse
 function ProgressChart({ analyses }: { analyses: any[] }) {
   // expect analyses sorted desc (most recent first)
   const points = analyses
+    .filter(a => a && a.timestamp) // Filter out invalid analyses
     .slice()
     .reverse()
-    .map(a => ({ x: new Date(a.timestamp).getTime(), y: typeof a.data?.errorPercentage === 'number' ? a.data.errorPercentage : (a.data?.ai_analysis?.errorPercentage || 0) }))
+    .map(a => ({ x: new Date(a.timestamp).getTime(), y: typeof a?.data?.errorPercentage === 'number' ? a.data.errorPercentage : (a?.data?.ai_analysis?.errorPercentage || 0) }))
 
   if (points.length === 0) {
     return <div className="text-sm text-gray-600">No historical data available to plot.</div>
@@ -525,11 +528,11 @@ function ProgressModal({ open, onClose, analyses, studentName }: { open: boolean
           <div className="grid grid-cols-1 lg:grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="p-4 bg-white border rounded">
               <div className="text-sm text-gray-600">Average Error</div>
-              <div className="text-xl font-semibold text-gray-900">{Math.round((analyses.reduce((s,a) => s + (a.data?.errorPercentage || a.data?.ai_analysis?.errorPercentage || 0), 0) / Math.max(1, analyses.length)))}%</div>
+              <div className="text-xl font-semibold text-gray-900">{Math.round((analyses.reduce((s,a) => s + (a?.data?.errorPercentage || a?.data?.ai_analysis?.errorPercentage || 0), 0) / Math.max(1, analyses.length)))}%</div>
             </div>
             <div className="p-4 bg-white border rounded">
               <div className="text-sm text-gray-600">Recent Trend</div>
-              <div className="text-xl font-semibold text-gray-900">{analyses.length >= 2 ? (analyses[0].data?.errorPercentage || analyses[0].data?.ai_analysis?.errorPercentage || 0) - (analyses[analyses.length-1].data?.errorPercentage || analyses[analyses.length-1].data?.ai_analysis?.errorPercentage || 0) : '—'}</div>
+              <div className="text-xl font-semibold text-gray-900">{analyses.length >= 2 ? (analyses[0]?.data?.errorPercentage || analyses[0]?.data?.ai_analysis?.errorPercentage || 0) - (analyses[analyses.length-1]?.data?.errorPercentage || analyses[analyses.length-1]?.data?.ai_analysis?.errorPercentage || 0) : '—'}</div>
             </div>
             <div className="p-4 bg-white border rounded">
               <div className="text-sm text-gray-600">Data points</div>

@@ -61,20 +61,22 @@ export default function Home() {
         
         // Converter formato do backend para frontend
         const FRONTEND_BACKEND_BASE = 'https://backend-professoria.onrender.com'
-        const frontendAnalyses: FrontendAnalysis[] = backendAnalyses.map(analysis => {
-          const rawData = analysis.data || {}
-          let imageUrl = rawData.imageUrl || ''
-          if (imageUrl && imageUrl.startsWith('/')) {
-            imageUrl = `${FRONTEND_BACKEND_BASE}${imageUrl}`
-          }
-          return {
-            id: analysis.id,
-            studentName: analysis.studentName,
-            subject: analysis.subject,
-            timestamp: new Date(analysis.timestamp),
-            data: { ...rawData, imageUrl }
-          }
-        })
+        const frontendAnalyses: FrontendAnalysis[] = backendAnalyses
+          .filter(analysis => analysis && analysis.id) // Filter out invalid analyses
+          .map(analysis => {
+            const rawData = analysis.data || {}
+            let imageUrl = rawData.imageUrl || ''
+            if (imageUrl && imageUrl.startsWith('/')) {
+              imageUrl = `${FRONTEND_BACKEND_BASE}${imageUrl}`
+            }
+            return {
+              id: analysis.id,
+              studentName: analysis.studentName || 'Unknown Student',
+              subject: analysis.subject || 'Unknown Subject',
+              timestamp: new Date(analysis.timestamp),
+              data: { ...rawData, imageUrl }
+            }
+          })
         
         setAnalyses(frontendAnalyses)
         
@@ -107,15 +109,19 @@ export default function Home() {
     setCurrentView("results")
     try {
       const result = await analysesApi.analyzeExercise(file, studentId, subject)
-      const frontendAnalysis: FrontendAnalysis = {
-        id: result.analysis.id,
-        studentName: result.analysis.studentName,
-        subject: result.analysis.subject,
-        timestamp: new Date(result.analysis.timestamp),
-        data: result.analysis.data
+      if (result?.analysis?.id) {
+        const frontendAnalysis: FrontendAnalysis = {
+          id: result.analysis.id,
+          studentName: result.analysis.studentName,
+          subject: result.analysis.subject,
+          timestamp: new Date(result.analysis.timestamp),
+          data: result.analysis.data
+        }
+        setAnalyses(prev => [frontendAnalysis, ...prev])
+        setSelectedAnalysis(frontendAnalysis)
+      } else {
+        console.error('Invalid analysis result:', result)
       }
-      setAnalyses(prev => [frontendAnalysis, ...prev])
-      setSelectedAnalysis(frontendAnalysis)
     } catch (error) {
       console.error('Error analyzing exercise:', error)
     } finally {
@@ -124,8 +130,13 @@ export default function Home() {
   }
 
   const handleAnalysisSelect = (analysis: FrontendAnalysis) => {
-    setSelectedAnalysis(analysis)
-    setCurrentView("results")
+    console.log('Analysis selected:', analysis)
+    if (analysis && analysis.id) {
+      setSelectedAnalysis(analysis)
+      setCurrentView("results")
+    } else {
+      console.error('Invalid analysis selected:', analysis)
+    }
   }
 
   const handleNewAnalysis = () => {
