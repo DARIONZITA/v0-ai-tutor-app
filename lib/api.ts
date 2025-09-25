@@ -1,6 +1,6 @@
 // API client for backend communication
 
-const API_BASE_URL = 'http://127.0.0.1:8000' // Backend URL
+const API_BASE_URL = 'https://backend-professoria.onrender.com' // Backend URL
 
 interface Student {
   id: string
