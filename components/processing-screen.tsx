@@ -7,71 +7,96 @@ import { BookOpen, Brain, Users, FileText, Sparkles } from "lucide-react"
 
 export function ProcessingScreen() {
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center shadow-sm">
-              <BookOpen className="w-5 h-5 text-primary-foreground" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      <header className="border-b border-border/50 glass-card sticky top-0 z-10">
+        <div className="container mx-auto px-6 py-5">
+          <div className="flex items-center gap-4">
+            <div className="w-11 h-11 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg hover-lift">
+              <BookOpen className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-foreground">Radar Pedagógico</h1>
-              <p className="text-xs text-muted-foreground">Análise IA para Educadores</p>
+                <h1 className="text-xl lg:text-2xl font-bold text-foreground">Pedagogical Radar</h1>
+                <p className="text-sm text-muted-foreground flex items-center gap-1">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+                  Analyzing your exercise...
+              </p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-16">
-        <div className="max-w-2xl mx-auto space-y-12">
-          {/* Main Processing Animation */}
-          <div className="text-center space-y-8 animate-fade-in">
+      <div className="container mx-auto px-6 py-20">
+        <div className="max-w-3xl mx-auto space-y-16">
+          {/* Main Processing Animation - More Human */}
+          <div className="text-center space-y-10 animate-fade-in">
             <div className="relative">
-              <div className="w-32 h-32 mx-auto bg-primary/5 rounded-full flex items-center justify-center animate-pulse-slow">
-                <Brain className="w-16 h-16 text-primary" />
+              {/* Main Brain Icon with Enhanced Animation */}
+              <div className="w-40 h-40 mx-auto bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/10 rounded-full flex items-center justify-center animate-pulse-slow shadow-2xl">
+                <Brain className="w-20 h-20 text-primary animate-float" />
               </div>
-              <div className="absolute inset-0 w-32 h-32 mx-auto">
-                <svg className="w-32 h-32 animate-spin" viewBox="0 0 128 128">
+              
+              {/* Animated Progress Ring */}
+              <div className="absolute inset-0 w-40 h-40 mx-auto">
+                <svg className="w-40 h-40 -rotate-90" viewBox="0 0 160 160">
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="60"
+                    cx="80"
+                    cy="80"
+                    r="70"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="4"
-                    className="text-border"
+                    strokeWidth="3"
+                    className="text-border/30"
                   />
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="60"
+                    cx="80"
+                    cy="80"
+                    r="70"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="4"
+                    strokeWidth="3"
                     strokeLinecap="round"
                     className="text-primary animate-progress"
                     style={{
-                      strokeDasharray: "377",
-                      strokeDashoffset: "94",
+                      strokeDasharray: "440",
+                      strokeDashoffset: "110",
+                      animation: "progress 3s ease-in-out infinite"
                     }}
                   />
                 </svg>
               </div>
+
+              {/* Floating Elements Around */}
+              <div className="absolute -top-4 -left-4 w-6 h-6 lg:w-8 lg:h-8 bg-secondary/20 rounded-lg animate-bounce-in"></div>
+              <div className="absolute -bottom-4 -right-4 w-5 h-5 lg:w-6 lg:h-6 bg-primary/20 rounded-full animate-bounce-in" style={{ animationDelay: "0.5s" }}></div>
+              <div className="absolute top-1/2 -right-8 w-4 h-4 bg-chart-3/20 rounded-full animate-bounce-in" style={{ animationDelay: "1s" }}></div>
             </div>
 
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold text-foreground">Analisando o exercício...</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg mx-auto">
-                Nossa IA está identificando padrões de erro e preparando insights personalizados para sua turma
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-primary/10 rounded-full border border-primary/20">
+                <div className="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
+                <span className="text-primary font-medium">IA Trabalhando...</span>
+              </div>
+              <h2 className="text-4xl font-bold text-foreground">
+             ✨ Analyzing your exercise
+              </h2>
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+             Our specialized artificial intelligence is 
+             <span className="font-semibold text-foreground"> examining every detail </span>
+             of the exercise to identify unique learning patterns of your class
               </p>
             </div>
           </div>
 
-          <Card className="p-8 shadow-sm border-border/50 animate-slide-up">
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Sparkles className="w-5 h-5 text-primary" />
-                <h3 className="font-semibold text-foreground">Progresso da Análise</h3>
+          <Card className="p-10 shadow-xl border-border/30 hover-lift animate-slide-up glass-card">
+            <div className="space-y-8">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 lg:w-6 lg:h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-foreground">Progresso da Análise</h3>
+                  <p className="text-sm text-muted-foreground">Acompanhe cada etapa do processo</p>
+                </div>
               </div>
 
               <div className="space-y-5">
@@ -104,17 +129,27 @@ export function ProcessingScreen() {
             </div>
           </Card>
 
-          <Card className="p-6 bg-primary/5 border-primary/20 animate-slide-up">
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
-                <span className="text-2xl">💡</span>
+          <Card className="p-8 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/5 border-primary/20 animate-slide-up hover-lift">
+            <div className="text-center space-y-4">
+              <div className="w-12 h-12 lg:w-16 lg:h-16 mx-auto bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl flex items-center justify-center animate-bounce-in">
+                <span className="text-2xl lg:text-3xl">🎯</span>
               </div>
               <div>
-                <h4 className="font-semibold text-foreground mb-2">Sabia que?</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Nossa IA consegue identificar mais de <strong>50 tipos diferentes</strong> de erros matemáticos e
-                  sugere exercícios personalizados baseados nas dificuldades específicas de cada aluno.
+                <h4 className="text-lg font-bold text-foreground mb-3">Você sabia?</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  Nossa IA especializada consegue identificar mais de <span className="font-bold text-primary">50 tipos diferentes</span> de erros matemáticos e 
+                  sugere <span className="font-bold text-secondary">exercícios personalizados</span> baseados nas dificuldades específicas de cada aluno.
                 </p>
+                <div className="flex items-center justify-center gap-4 mt-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Precisão de 94%</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-secondary rounded-full"></div>
+                    <span>Análise em 3s</span>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>

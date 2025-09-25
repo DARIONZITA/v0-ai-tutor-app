@@ -12,9 +12,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Radar Pedagógico - Análise IA para Educadores",
+  title: "Pedagogical Radar - AI Analysis for Educators",
   description:
-    "Plataforma educacional que usa IA para analisar exercícios de matemática e identificar padrões de erro dos alunos",
+    "Educational platform that uses AI to analyze math exercises and identify student error patterns",
   generator: "v0.app",
 }
 
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />

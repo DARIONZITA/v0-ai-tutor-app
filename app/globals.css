@@ -41,38 +41,38 @@
 }
 
 .dark {
-  --background: oklch(0.08 0.01 106);
-  --foreground: oklch(0.95 0.01 106);
-  --card: oklch(0.1 0.01 106);
-  --card-foreground: oklch(0.95 0.01 106);
-  --popover: oklch(0.1 0.01 106);
-  --popover-foreground: oklch(0.95 0.01 106);
-  --primary: oklch(0.65 0.15 220);
-  --primary-foreground: oklch(0.08 0.01 106);
-  --secondary: oklch(0.55 0.12 140);
-  --secondary-foreground: oklch(0.08 0.01 106);
-  --muted: oklch(0.15 0.01 106);
-  --muted-foreground: oklch(0.65 0.02 106);
-  --accent: oklch(0.15 0.01 106);
-  --accent-foreground: oklch(0.95 0.01 106);
-  --destructive: oklch(0.65 0.18 15);
-  --destructive-foreground: oklch(0.08 0.01 106);
-  --border: oklch(0.2 0.01 106);
-  --input: oklch(0.2 0.01 106);
-  --ring: oklch(0.65 0.15 220);
-  --chart-1: oklch(0.65 0.15 220);
-  --chart-2: oklch(0.55 0.12 140);
-  --chart-3: oklch(0.7 0.15 30);
-  --chart-4: oklch(0.6 0.12 280);
-  --chart-5: oklch(0.75 0.15 350);
-  --sidebar: oklch(0.08 0.01 106);
-  --sidebar-foreground: oklch(0.95 0.01 106);
-  --sidebar-primary: oklch(0.65 0.15 220);
-  --sidebar-primary-foreground: oklch(0.08 0.01 106);
-  --sidebar-accent: oklch(0.15 0.01 106);
-  --sidebar-accent-foreground: oklch(0.95 0.01 106);
-  --sidebar-border: oklch(0.2 0.01 106);
-  --sidebar-ring: oklch(0.65 0.15 220);
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+  --primary: #60a5fa;
+  --primary-foreground: #0f172a;
+  --secondary: #4ade80;
+  --secondary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --accent: #334155;
+  --accent-foreground: #f1f5f9;
+  --destructive: #f87171;
+  --destructive-foreground: #0f172a;
+  --border: #475569;
+  --input: #334155;
+  --ring: #60a5fa;
+  --chart-1: #60a5fa;
+  --chart-2: #4ade80;
+  --chart-3: #fbbf24;
+  --chart-4: #f87171;
+  --chart-5: #a78bfa;
+  --sidebar: #0f172a;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #60a5fa;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #f1f5f9;
+  --sidebar-border: #475569;
+  --sidebar-ring: #60a5fa;
 }
 
 @theme inline {
@@ -129,27 +129,50 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Enhanced animations for better feedback visual */
+/* Enhanced animations for better feedback visual - more human and delightful */
 .animate-pulse-slow {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: gentlePulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-slide-up {
-  animation: slideUp 0.5s ease-out;
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .animate-progress {
-  animation: progress 2s ease-in-out;
+  animation: progress 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -160,7 +183,7 @@ body {
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(32px);
   }
   to {
     opacity: 1;
@@ -168,16 +191,135 @@ body {
   }
 }
 
-@keyframes progress {
-  0% {
-    width: 0%;
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
   }
-  50% {
-    width: 60%;
-  }
-  100% {
-    width: 100%;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes progress {
+  0% {
+    stroke-dashoffset: 377;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Hover effects for better interaction feedback */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Gentle glass morphism effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Removed gradient background for cleaner, Google Classroom-inspired look */
+
+/* Custom animations for landing page */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s ease-out;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+.hover-lift {
+  transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
