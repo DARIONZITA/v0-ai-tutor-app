@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   description:
     "Educational platform that uses AI to analyze math exercises and identify student error patterns",
   generator: "v0.app",
+  icons: {
+    icon: '/placeholder-logo.svg',
+  },
 }
 
 export default function RootLayout({
